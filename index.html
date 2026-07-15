@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f0f1a">
+    <title>Revisão Genética P3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #0f0f1a;
+            --card: #1a1a2e;
+            --card-border: #2a2a4a;
+            --accent: #7c3aed;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --green: #10b981;
+            --green-light: #6ee7b7;
+            --blue: #3b82f6;
+            --blue-light: #93c5fd;
+            --pink: #ec4899;
+            --pink-light: #f9a8d4;
+            --orange: #f97316;
+            --orange-light: #fdba74;
+            --yellow: #eab308;
+            --yellow-light: #fde047;
+            --red: #ef4444;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 0;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: 80px;
+        }
+
+        /* ====== PRINT STYLES ====== */
+        @media print {
+            body {
+                background: white;
+                color: #1a1a2e;
+                padding: 0;
+                font-size: 11pt;
+                line-height: 1.5;
+            }
+            .page-break { page-break-before: always; }
+            .no-print { display: none !important; }
+            .cover-page {
+                background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 50%, #10b981 100%) !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .section-card {
+                border: 1.5px solid #ddd !important;
+                background: white !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+            .topic-header {
+                background: linear-gradient(135deg, #7c3aed, #3b82f6) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                color: white !important;
+            }
+            .mind-map {
+                border: 1.5px solid #7c3aed !important;
+                background: #f8f7ff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .mind-map-node {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .question-card {
+                border: 1.5px solid #ddd !important;
+                background: #fafafa !important;
+                break-inside: avoid;
+            }
+            .btn-print { display: none !important; }
+            .reveal-btn { display: none !important; }
+            .answer-text { display: block !important; color: #10b981 !important; }
+            .container { max-width: 100%; padding: 0 10px; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ====== COVER PAGE ====== */
+        .cover-page {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--blue) 50%, var(--green) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '🧬';
+            font-size: 200px;
+            position: absolute;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .cover-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .cover-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cover-topics {
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 600px;
+        }
+
+        .cover-topic-tag {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* ====== TOC ====== */
+        .toc {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 35px;
+            margin: 40px 0;
+        }
+
+        .toc h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent-light);
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .toc-item:hover { color: var(--accent-light); padding-left: 10px; }
+
+        .toc-number {
+            background: var(--accent);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .toc-label { font-weight: 500; font-size: 1.05rem; }
+
+        /* ====== SECTION CARDS ====== */
+        .section-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            padding: 25px 30px;
+            position: relative;
+        }
+
+        .topic-header.green { background: linear-gradient(135deg, var(--green), #059669); }
+        .topic-header.pink { background: linear-gradient(135deg, var(--pink), #db2777); }
+        .topic-header.orange { background: linear-gradient(135deg, var(--orange), #ea580c); }
+        .topic-header.blue { background: linear-gradient(135deg, var(--blue), #2563eb); }
+        .topic-header.yellow { background: linear-gradient(135deg, var(--yellow), #ca8a04); color: #1a1a2e; }
+
+        .topic-header h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topic-header .aula-tag {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.25);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .section-body {
+            padding: 30px;
+        }
+
+        /* ====== CONCEPT BLOCKS ====== */
+        .concept-block {
+            margin-bottom: 22px;
+        }
+
+        .concept-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-light);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concept-title::before {
+            content: '▸';
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .concept-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            padding-left: 20px;
+        }
+
+        .highlight-box {
+            background: rgba(124, 58, 237, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .highlight-box.green {
+            background: rgba(16, 185, 129, 0.1);
+            border-left-color: var(--green);
+        }
+
+        .highlight-box.pink {
+            background: rgba(236, 72, 153, 0.1);
+            border-left-color: var(--pink);
+        }
+
+        .highlight-box.orange {
+            background: rgba(249, 115, 22, 0.1);
+            border-left-color: var(--orange);
+        }
+
+        .highlight-box.blue {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: var(--blue);
+        }
+
+        .key-term {
+            color: var(--accent-light);
+            font-weight: 600;
+        }
+
+        .formula-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 15px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .formula-box .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: var(--blue-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        /* ====== COMPARISON TABLE ====== */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th {
+            background: var(--accent);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-table tr:nth-child(even) td {
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        /* ====== MIND MAPS ====== */
+        .mind-map {
+            background: rgba(124, 58, 237, 0.05);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .mind-map-title {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--accent-light);
+            margin-bottom: 25px;
+        }
+
+        .mm-center {
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-align: center;
+            max-width: 280px;
+            margin: 0 auto 25px auto;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .mm-branches {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .mm-branch {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        .mm-branch.green { border-left-color: var(--green); }
+        .mm-branch.pink { border-left-color: var(--pink); }
+        .mm-branch.blue { border-left-color: var(--blue); }
+        .mm-branch.orange { border-left-color: var(--orange); }
+        .mm-branch.yellow { border-left-color: var(--yellow); }
+
+        .mm-branch-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .mm-branch.green .mm-branch-title { color: var(--green-light); }
+        .mm-branch.pink .mm-branch-title { color: var(--pink-light); }
+        .mm-branch.blue .mm-branch-title { color: var(--blue-light); }
+        .mm-branch.orange .mm-branch-title { color: var(--orange-light); }
+        .mm-branch.yellow .mm-branch-title { color: var(--yellow-light); }
+
+        .mm-branch-items {
+            list-style: none;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .mm-branch-items li {
+            padding: 3px 0;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .mm-branch-items li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--text-dim);
+        }
+
+        /* ====== QUESTIONS ====== */
+        .questions-section {
+            margin: 40px 0;
+        }
+
+        .questions-header {
+            background: linear-gradient(135deg, var(--green), #059669);
+            padding: 25px 30px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .questions-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 22px 25px;
+            margin: 15px 0;
+        }
+
+        .question-number {
+            background: var(--accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .option {
+            padding: 10px 15px;
+            margin: 6px 0;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--green);
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .option.wrong {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.1);
+            opacity: 0.7;
+        }
+
+        .option-letter {
+            font-weight: 700;
+            color: var(--accent-light);
+            margin-right: 8px;
+        }
+
+        .answer-text {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: var(--green-light);
+            border-left: 3px solid var(--green);
+        }
+
+        .reveal-btn {
+            margin-top: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .reveal-btn:hover {
+            background: var(--accent-light);
+            color: var(--bg);
+        }
+
+        /* ====== PRINT BUTTON ====== */
+        .btn-print {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 8px 30px var(--accent-glow);
+            transition: all 0.3s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-print:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px var(--accent-glow);
+        }
+
+        /* ====== STEP LIST ====== */
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 8px 0 8px 40px;
+            position: relative;
+            font-size: 0.93rem;
+            color: var(--text-muted);
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 26px;
+            height: 26px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        hr.section-divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 40px 0;
+        }
+
+        .emoji-icon {
+            font-size: 1.3rem;
+        }
+
+        .sub-list {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .sub-list li {
+            padding: 2px 0;
+            font-size: 0.88rem;
+        }
+
+        .sub-list li::before {
+            display: none;
+        }
+
+        /* ====== MOBILE NAV BAR ====== */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            padding-bottom: calc(8px + env(safe-area-inset-bottom));
+            z-index: 1000;
+        }
+
+        .mobile-nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 0.65rem;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 10px;
+            transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-nav-btn .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        .mobile-nav-btn.active {
+            color: var(--accent-light);
+            background: rgba(124, 58, 237, 0.15);
+        }
+
+        /* ====== SECTIONS MENU OVERLAY ====== */
+        .sections-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 15, 26, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sections-overlay.open {
+            display: flex;
+        }
+
+        .sections-overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .sections-overlay-header h2 {
+            font-size: 1.4rem;
+            color: var(--accent-light);
+        }
+
+        .close-overlay {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            margin: 5px 0;
+            border-radius: 12px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .section-nav-item:active {
+            transform: scale(0.97);
+            background: rgba(124, 58, 237, 0.2);
+        }
+
+        .section-nav-icon {
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(124, 58, 237, 0.15);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .section-nav-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .section-nav-sub {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* ====== SCORE TRACKER ====== */
+        .score-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 12px 20px;
+            z-index: 500;
+            display: none;
+        }
+
+        .score-bar.visible {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .score-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .score-badge {
+            background: linear-gradient(135deg, var(--green), #059669);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .score-progress {
+            flex: 1;
+            height: 6px;
+            background: var(--card-border);
+            border-radius: 3px;
+            overflow: hidden;
+            min-width: 80px;
+        }
+
+        .score-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--green));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .score-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ====== MOBILE RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            .cover-title {
+                font-size: 2.2rem;
+            }
+
+            .cover-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .cover-badge {
+                font-size: 0.85rem;
+                padding: 10px 20px;
+            }
+
+            .cover-topics {
+                gap: 6px;
+            }
+
+            .cover-topic-tag {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .toc {
+                padding: 20px;
+            }
+
+            .toc h2 {
+                font-size: 1.3rem;
+            }
+
+            .topic-header {
+                padding: 18px 20px;
+            }
+
+            .topic-header h2 {
+                font-size: 1.2rem;
+                flex-wrap: wrap;
+            }
+
+            .topic-header .aula-tag {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .section-body {
+                padding: 18px;
+            }
+
+            .concept-title {
+                font-size: 1rem;
+            }
+
+            .concept-text {
+                font-size: 0.88rem;
+                padding-left: 12px;
+            }
+
+            .mm-branches {
+                grid-template-columns: 1fr;
+            }
+
+            .mm-center {
+                font-size: 0.95rem;
+                padding: 12px 20px;
+            }
+
+            .mind-map {
+                padding: 18px;
+            }
+
+            .comparison-table {
+                font-size: 0.78rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px 10px;
+            }
+
+            .option {
+                padding: 14px 16px;
+                margin: 8px 0;
+                font-size: 0.88rem;
+                border-radius: 10px;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .option:active {
+                transform: scale(0.98);
+            }
+
+            .question-text {
+                font-size: 0.95rem;
+            }
+
+            .reveal-btn {
+                padding: 10px 22px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+
+            .formula-box {
+                font-size: 0.85rem;
+                padding: 14px 16px;
+            }
+
+            .highlight-box {
+                font-size: 0.88rem;
+                padding: 12px 16px;
+            }
+
+            .btn-print {
+                display: none;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .toc-item {
+                padding: 14px 0;
+            }
+
+            .step-list li {
+                font-size: 0.85rem;
+                padding-left: 35px;
+            }
+        }
+
+        /* ====== ANIMATIONS ====== */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .section-card {
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        .score-badge.pulse {
+            animation: pulse 0.4s ease;
+        }
+
+        /* ====== CONFETTI OVERLAY ====== */
+        .confetti-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3000;
+        }
+
+        /* ====== RESET BUTTON ====== */
+        .reset-quiz-btn {
+            background: linear-gradient(135deg, var(--orange), var(--pink));
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            display: block;
+            margin: 25px auto;
+            transition: all 0.2s;
+        }
+
+        .reset-quiz-btn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===================== CAPA ===================== -->
+<div class="cover-page">
+    <div class="cover-title">🧬 Genética P3</div>
+    <div class="cover-subtitle">Guia Completo de Revisão</div>
+    <div class="cover-badge">📚 Resumos • Mapas Mentais • Questões</div>
+    <div class="cover-topics">
+        <span class="cover-topic-tag">Epigenética</span>
+        <span class="cover-topic-tag">Metilação do DNA</span>
+        <span class="cover-topic-tag">Modificações de Histonas</span>
+        <span class="cover-topic-tag">Inativação do X</span>
+        <span class="cover-topic-tag">Herança Poligênica</span>
+        <span class="cover-topic-tag">Herdabilidade</span>
+        <span class="cover-topic-tag">Genética de Populações</span>
+    </div>
+</div>
+
+<!-- ===================== SUMÁRIO ===================== -->
+<div class="container">
+    <div class="toc page-break">
+        <h2>📑 Sumário</h2>
+        <a class="toc-item" href="#sec1"><span class="toc-number">1</span><span class="toc-label">Epigenética — Conceitos Fundamentais</span></a>
+        <a class="toc-item" href="#sec2"><span class="toc-number">2</span><span class="toc-label">Metilação do DNA</span></a>
+        <a class="toc-item" href="#sec3"><span class="toc-number">3</span><span class="toc-label">Modificações de Histonas</span></a>
+        <a class="toc-item" href="#sec4"><span class="toc-number">4</span><span class="toc-label">RNAs Não Codificantes</span></a>
+        <a class="toc-item" href="#sec5"><span class="toc-number">5</span><span class="toc-label">Inativação do Cromossomo X</span></a>
+        <a class="toc-item" href="#sec6"><span class="toc-number">6</span><span class="toc-label">Genética de Pelagem em Gatos</span></a>
+        <a class="toc-item" href="#sec7"><span class="toc-number">7</span><span class="toc-label">Herança Poligênica e Multifatorial</span></a>
+        <a class="toc-item" href="#sec8"><span class="toc-number">8</span><span class="toc-label">Herdabilidade</span></a>
+        <a class="toc-item" href="#sec9"><span class="toc-number">9</span><span class="toc-label">Mapas Mentais</span></a>
+        <a class="toc-item" href="#sec10"><span class="toc-number">10</span><span class="toc-label">Questões de Revisão</span></a>
+    </div>
+
+    <!-- ===================== SEÇÃO 1: EPIGENÉTICA ===================== -->
+    <div class="section-card page-break" id="sec1">
+        <div class="topic-header">
+            <h2><span class="emoji-icon">🔬</span> Epigenética — Conceitos Fundamentais <span class="aula-tag">AULAS 1-2</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">O que é Epigenética?</div>
+                <div class="concept-text">
+                    Estuda as <span class="key-term">mudanças na expressão gênica que são hereditárias</span>, mas que <strong>não alteram a sequência de bases do DNA</strong>. São mecanismos que controlam quais genes serão "ligados" ou "desligados" sem mudar o código genético.
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>⚠️ Conceito-Chave:</strong> O genoma não é estático (plasticidade). Existem mecanismos epigenéticos funcionalmente reversíveis que constituem a <span class="key-term">herança epigenética</span>.
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Herança vs. Epigenética</div>
+                <div class="concept-text">
+                    Só é considerada <span class="key-term">herança</span> se for transmitida através da <strong>mitose ou meiose</strong>. Mecanismos transmitidos por mitose/meiose = herança epigenética. Mecanismos transitórios = apenas epigenéticos.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Epigenética é Reversível</div>
+                <div class="concept-text">
+                    Diferente de uma mutação, as <span class="key-term">marcas epigenéticas podem ser colocadas e retiradas</span> por enzimas específicas. Isso diferencia de alterações permanentes no DNA.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Memória Epigenética (Vernalização)</div>
+                <div class="concept-text">
+                    Exemplo clássico: sementes que "lembram" pelo frio prolongado do inverno e sabem que já podem germinar. É uma forma de memória celular sem alteração genética.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Genótipo</div>
+                <div class="concept-text">
+                    Composição alélica de um locus específico.
+                </div>
+            </div>
+
+            <div class="highlight-box green">
+                <strong>📌 Para a prova:</strong> O pensamento antigo era que só o homem era responsável pelas características, através do sêmen. Hoje sabemos que ambos os pais contribuem geneticamente e epigeneticamente.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 2: METILAÇÃO DO DNA ===================== -->
+    <div class="section-card page-break" id="sec2">
+        <div class="topic-header green">
+            <h2><span class="emoji-icon">🧪</span> Metilação do DNA <span class="aula-tag">AULAS 1-2</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">O que é?</div>
+                <div class="concept-text">
+                    Adição de um <span class="key-term">grupo metil (CH₃)</span> ao DNA. Geralmente <strong>silencia (desatura) o gene</strong>. O grupo metil funciona como uma <strong>"placa de pare"</strong>, bloqueando fisicamente a maquinaria de transcrição para que ela não consiga ler aquele pedaço do DNA.
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🎯 Regra Geral:</strong> Metilação do DNA → Geralmente <span class="key-term">silencia</span> o gene!
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Metilação na Região 5' (Promotora)</div>
+                <div class="concept-text">
+                    A metilação na região 5' regulatória é <span class="key-term">REPRESSORA</span>. Ela dificulta ou impede o reconhecimento dos fatores de transcrição e consequentemente não se monta o aparato da RNA polimerase. Reprime a expressão gênica.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Metilação no Corpo do Gene</div>
+                <div class="concept-text">
+                    Papel funcional é diferente: é um papel <span class="key-term">ATIVADOR</span> da transcrição. A metilação no corpo do gene força a montagem do complexo transcricional onde ele efetivamente tem que se montar. Se a RNA pol se montar no corpo do gene (fora do lugar), gera transcritos incompletos → defeitos fenotípicos.
+                </div>
+            </div>
+
+            <div class="highlight-box pink">
+                <strong>⚡ Resumo:</strong><br>
+                • Metilação na região <strong>5' (promotora)</strong> → <span class="key-term">REPRESSORA</span><br>
+                • Metilação no <strong>corpo do gene</strong> → <span class="key-term">ATIVADORA</span>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Sítios CpG</div>
+                <div class="concept-text">
+                    Em mamíferos, a maioria das citosinas metiladas são aquelas seguidas de guanina em <span class="key-term">sítio CpG</span> (citosina-ligação fosfodiéster-guanina). Na maioria dos casos, precisa ter metilação simétrica para ser funcional.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">MeCP2 e Repressão</div>
+                <div class="concept-text">
+                    As citosinas metiladas recrutam <span class="key-term">repressores transcricionais</span>, sendo um deles o <strong>MeCP2</strong>. O MeCP2 recruta outros repressores, transformando a região em <strong>heterocromatina</strong> (cromatina altamente compactada e refratária à transcrição). Mutações em MeCP2 levam a uma situação <strong>neurodegenerativa</strong>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Desmetilação Passiva</div>
+                <div class="concept-text">
+                    Quando um trecho de DNA metilado se replica, a fita recém sintetizada <strong>não fica metilada</strong> (não tem DNA metil transferase). Se houver mais uma duplicação sem DNA metil transferase, as moléculas ficam <strong>totalmente não metiladas</strong>. É a desmetilação passiva.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Desmetilação Ativa (Enzimas TET)</div>
+                <div class="concept-text">
+                    A metilação de citosina tem <strong>3 etapas intermediárias de oxidação</strong> e no final tem reparo por excisão de nucleotídeos:<br>
+                    • <strong>TET1</strong>: pega o grupo metil → oxida → gera a <span class="key-term">hidroximetilcitosina</span><br>
+                    • <strong>TET2</strong>: oxida novamente → gera a <span class="key-term">5-formilcitosina</span><br>
+                    • <strong>TET3</strong>: oxida a 5-formil → gera a <span class="key-term">5-carboxilcitosil</span><br>
+                    A 5-carboxilcitosina é reconhecida pelo reparo de excisão de nucleotídeos → corta e substitui por uma citosina <strong>não metilada</strong>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Metilação do Resíduo de Lisina 36 da Histona H3</div>
+                <div class="concept-text">
+                    É metilação de resíduo de lisina (diferente da metilação de citosina no DNA). Essa é uma <span class="key-term">marca típica ativadora</span> de transcrição. Ela colabora com a elongação do transcrito. Citosinas metiladas nessa região <strong>não recrutam marcas repressoras</strong>.
+                </div>
+            </div>
+
+            <div class="highlight-box orange">
+                <strong>💡 Marca Repressora Clássica:</strong> Metilação do resíduo de <span class="key-term">Lisina 4</span> da Histona H3.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 3: MODIFICAÇÕES DE HISTONAS ===================== -->
+    <div class="section-card page-break" id="sec3">
+        <div class="topic-header pink">
+            <h2><span class="emoji-icon">🧱</span> Modificações de Histonas <span class="aula-tag">AULAS 1-2</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">Histonas — Visão Geral</div>
+                <div class="concept-text">
+                    A histona H2A só é sintetizada na fase de preparação para a divisão celular. A variante de histona pode ser sintetizada em qualquer fase do ciclo. As <span class="key-term">variantes substituem as histonas em situações diferentes</span>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Variante Macro H2A</div>
+                <div class="concept-text">
+                    No cromossomo X inativado, <strong>não vai encontrar H2A</strong>, vai encontrar a <span class="key-term">Macro H2A</span> — uma variante de histona que é marca registrada de <strong>cromossomo X silenciado</strong>.
+                </div>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Modificação</th>
+                        <th>Efeito</th>
+                        <th>Mecanismo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Acetilação</strong></td>
+                        <td style="color: var(--green-light);">✅ ATIVA a transcrição</td>
+                        <td>Adição de grupo acetil "afrouxa" o DNA, criando eucromatina (cromatina aberta). Torna o gene acessível.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Metilação (de histona)</strong></td>
+                        <td style="color: var(--orange-light);">⚠️ Depende do resíduo</td>
+                        <td>Pode ativar ou reprimir, dependendo de qual aminoácido exato da cauda foi modificado.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Desacetilação</strong></td>
+                        <td style="color: var(--red);">❌ REPRIME a transcrição</td>
+                        <td>Marca silenciadora — compacta a cromatina.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <strong>📌 Lembre-se:</strong> Impedimento espacial + recrutamento de repressores atuam <strong>conjuntamente</strong> para levar ao silenciamento de locus gênicos. Não é uma coisa ou outra — são os dois juntos!
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 4: RNAs NÃO CODIFICANTES ===================== -->
+    <div class="section-card" id="sec4">
+        <div class="topic-header orange">
+            <h2><span class="emoji-icon">🔗</span> RNAs Não Codificantes <span class="aula-tag">AULA 1</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">Como funcionam?</div>
+                <div class="concept-text">
+                    RNAs não codificantes atuam na <strong>fase final</strong>. Eles se ligam ao <span class="key-term">RNA mensageiro</span> que já foi transcrito e o destroem ou bloqueiam, <strong>impedindo que a tradução ocorra no ribossomo</strong>. É um mecanismo de silenciamento pós-transcricional.
+                </div>
+            </div>
+
+            <div class="highlight-box orange">
+                <strong>Mecanismo:</strong> RNA não codificante → liga-se ao mRNA → destrói ou bloqueia → impede tradução no ribossomo
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 5: INATIVAÇÃO DO X ===================== -->
+    <div class="section-card page-break" id="sec5">
+        <div class="topic-header blue">
+            <h2><span class="emoji-icon">🔇</span> Inativação do Cromossomo X <span class="aula-tag">AULA 3</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">Xist e Tsix</div>
+                <div class="concept-text">
+                    • <span class="key-term">Xist</span> → RNA de silenciamento. Reveste toda a superfície do cromossomo X, causando a inativação.<br>
+                    • <span class="key-term">Tsix</span> → mantém o X ativo. Ambos começam ativos e um desliga o outro em cada X.<br>
+                    • O silenciamento de Xist é <strong>inicial</strong> no processo de silenciamento (depois ocorre uma série de outras marcas silenciadoras).
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Manutenção do Status de Inativação</div>
+                <div class="concept-text">
+                    A posição do X inativo dentro do núcleo é importantíssima. O <span class="key-term">X inativo fica preso no folheto interno do envelope nuclear</span>, é sempre o último cromossomo a replicar, se replica e já compacta! A posição entre o folheto interno e o nucléolo é essencial para manter a compactação.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Transcrição no X Inativo</div>
+                <div class="concept-text">
+                    Só vai ser transcrito regiões do cromossomo X que estão <strong>além, fora do revestimento Xist</strong> (provocado por XIST). Onde não tem RNA pol II, não tem transcrição de mRNA.
+                </div>
+            </div>
+
+            <div class="highlight-box blue">
+                <strong>📋 Ordem de Eventos do Silenciamento do Cromossomo X:</strong>
+                <ol class="step-list">
+                    <li>Acúmulo de Xist e revestimento de Lest → replicação tardia e repressão transcricional</li>
+                    <li>Desacetilação geral (marca silenciadora)</li>
+                    <li>Substituição da histona H2A pela variante <span class="key-term">Macro H2A.2</span> (variante de histona — marca registrada do X inativo, só acontece nessa situação!)</li>
+                    <li>Metilação de sítio CpG (mais tardia)</li>
+                    <li>Metilação do resíduo de Lisina 9 da histona H3 (para manter Xist inativado)</li>
+                </ol>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Metilação de Adenina</div>
+                <div class="concept-text">
+                    Outra coisa importante para inativação de X é a <span class="key-term">metilação de adenina</span>. A maioria dos silenciamentos epigenéticos começa com metilação de sítio CpG, mas na inativação de X a metilação de CpG é mais tardia.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Cobertura de Xist</div>
+                <div class="concept-text">
+                    A "cobertura" de Xist atrai variantes de remodelação da cromatina. A metilação do DNA é inserida pró-último para silenciamento epigenético e no X é um dos últimos eventos.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 6: PELAGEM DE GATOS ===================== -->
+    <div class="section-card page-break" id="sec6">
+        <div class="topic-header yellow">
+            <h2><span class="emoji-icon">🐱</span> Genética de Pelagem em Gatos <span class="aula-tag">AULA 3-4</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">Coloração — Gene Orange e KIT</div>
+                <div class="concept-text">
+                    • <span class="key-term">Orange</span> → gene ligado ao X que determina cor<br>
+                    • <span class="key-term">KIT</span> → W<sup>s</sup>, W<sup>+</sup>, W (homozigoto/heterozigoto) → Spotted Selvagem<br>
+                    • A coloração <strong>branca</strong> vem de um gene autossômico. Esse gene foi mapeado na população de gatos domésticos. <strong>⚠️ Não confundir gato branco com albino!</strong><br>
+                    • Se tiver listras pelo corpo (malhado/tigrado) = <strong>wild type</strong>
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Série Alélica</div>
+                <div class="concept-text">
+                    <span class="key-term">W (LTR, branco) > W<sup>s</sup> (malhado) > W<sup>+</sup> (cor cheia)</span><br>
+                    → Só branco apresenta <strong>100% de penetrância</strong>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Gato de 3 Cores</div>
+                <div class="concept-text">
+                    Se um gato tem 3 cores → é <span class="key-term">fêmea</span> ou <span class="key-term">Klinefelter (XXY)</span>. A coloração branca vem do locus autossomo. O gene da cor laranja/preta está no X → por inativação aleatória do X, a fêmea tem manchas de ambas as cores.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Epistasia e Pleiotropia</div>
+                <div class="concept-text">
+                    • <span class="key-term">Epistasia</span> (gene KIT): um gene altera a expressão de um outro gene localizado em um locus diferente. Genes determinando a cor do pelo interagindo entre si.<br>
+                    • <span class="key-term">Pleiotropia</span>: um único gene tem um efeito "dominó" e causa várias características diferentes no organismo.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Alelo Selvagem e ASIP (Agouti)</div>
+                <div class="concept-text">
+                    O alelo selvagem — o gene de via de transdução de sinal é silenciado. Sendo silenciado, produz só melanina escura. No alelo mutado, tem uma deleção que provoca perda do silenciamento: o <span class="key-term">ASIP passa a ser expresso</span>. ASIP expresso prejudica a produção da melanina mais escura e aumenta a produção da <strong>melanina amarela</strong>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Homozigoto Mutado</div>
+                <div class="concept-text">
+                    O homozigoto mutado para o gene <span class="key-term">TYR (Tirosinase)</span> e gene <strong>Orange</strong>: se KIT não importa → apresenta fenótipo <strong>epistático</strong>.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Partenogênese</div>
+                <div class="concept-text">
+                    O oócito/ovócito pode se endomultiplicar. Se tiver desenvolvimento a partir de um ovócito não fecundado, chama-se <span class="key-term">partenogênese</span>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 7: HERANÇA POLIGÊNICA ===================== -->
+    <div class="section-card page-break" id="sec7">
+        <div class="topic-header">
+            <h2><span class="emoji-icon">📊</span> Herança Poligênica e Multifatorial <span class="aula-tag">AULAS 4-5, 21</span></h2>
+        </div>
+        <div class="section-body">
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>Doenças Monogênicas</th>
+                        <th>Doenças Complexas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Herança</strong></td>
+                        <td>Segregação em padrão definido</td>
+                        <td>Sem padrão de herança claro</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Causa</strong></td>
+                        <td>Mutação em um gene</td>
+                        <td>Vários genes + ambiente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Agrupamento</strong></td>
+                        <td>Mendeliano</td>
+                        <td>Em famílias, sem padrão claro</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="concept-block">
+                <div class="concept-title">Herança Poligênica</div>
+                <div class="concept-text">
+                    Uma única característica (altura, peso, cor da pele) é determinada por <strong>dois ou mais pares de genes</strong> que estão em cromossomos diferentes. Cada alelo dominante atua com um <span class="key-term">efeito aditivo</span> — ou seja, cada alelo da classe dominante soma um grau na intensidade do fenótipo final.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Herança Monogênica vs. Poligênica</div>
+                <div class="concept-text">
+                    • <span class="key-term">Monogênica (Qualitativa)</span>: características de "tipo", variação descontínua, fenótipos bem definidos (ex: roxo, rosa, branco), foco em cruzamentos individuais e sua progênie, análise por contagens e razões.<br>
+                    • <span class="key-term">Poligênica (Quantitativa)</span>: características de "grau" (peso, altura, litros, nível), variação contínua, classes fenotípicas dispostas em um espectro, foco em uma população de indivíduos, análises estatísticas de parâmetros populacionais.
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Modelo Aditivo de Herança</div>
+                <div class="concept-text">
+                    Dois ou mais genes influenciam o fenótipo de uma forma cumulativa. Cada gene pode apresentar 2 alelos distintos:<br>
+                    • <span class="key-term">Alelo contribuinte</span> (aditivo) → soma ao fenótipo<br>
+                    • <span class="key-term">Alelo não contribuinte</span> (não aditivo) → não adiciona<br>
+                    Ex: milhos de tamanhos diferentes usando o mesmo alelo, o menor apresenta alelo não contribuinte — nos médios tem variação.
+                </div>
+            </div>
+
+            <div class="formula-box">
+                <div class="label">Fórmula — Número de Classes Fenotípicas</div>
+                F = 2n + 1<br>
+                <small>onde n = nº de pares de genes</small>
+            </div>
+
+            <div class="formula-box">
+                <div class="label">Fórmula — Nº de Classes Fenotípicas na F2 a partir do nº de genes</div>
+                Classes = n(2) + 1<br>
+                <small>Ex: 4 genes → 4(2)+1 = 9 classes fenotípicas</small>
+            </div>
+
+            <div class="formula-box">
+                <div class="label">Fórmula — Nº de genes a partir dos fenótipos extremos</div>
+                Para estimar o nº de genes envolvidos na manifestação:<br>
+                Proporção extrema = 1/4<sup>n</sup><br>
+                <small>Ex: Aa × Bb → nº pares = (m):2 → Alelos: 4 (A, a, B, b)<br>
+                Cálculo: 2(2)+1 = 5 → <strong>5 graus fenotípicos</strong></small>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Características Multifatoriais em Humanos</div>
+                <div class="concept-text">
+                    <strong>Normais:</strong> Altura, cor do cabelo, inteligência, pressão sanguínea, peso.<br>
+                    <strong>Patológicas:</strong> Diabetes, dislexia, esquizofrenia, glaucoma, hipertensão arterial, malformações congênitas.
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>Exemplos:</strong><br>
+                • <strong>Quantitativa</strong> → Pressão (consegue medir)<br>
+                • <strong>Multifatorial</strong> → Esquizofrenia (genes + ambiente)
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== SEÇÃO 8: HERDABILIDADE ===================== -->
+    <div class="section-card page-break" id="sec8">
+        <div class="topic-header green">
+            <h2><span class="emoji-icon">📈</span> Herdabilidade <span class="aula-tag">AULAS 5, 22</span></h2>
+        </div>
+        <div class="section-body">
+            <div class="concept-block">
+                <div class="concept-title">O que é Herdabilidade?</div>
+                <div class="concept-text">
+                    Indica se a participação dos genes na determinação de um fenótipo é grande ou pequena. É um <span class="key-term">conceito POPULACIONAL e não individual</span>.
+                </div>
+            </div>
+
+            <div class="highlight-box green">
+                <strong>Escala de Herdabilidade (h²): 0 a 1</strong><br>
+                • <strong>h² = 1</strong> → toda a característica é devida ao componente genético<br>
+                • <strong>h² = 0</strong> → diz que não tem nada de genético nessa característica (totalmente ambiental)<br>
+                • Valores intermediários → contribuição mista
+            </div>
+
+            <div class="formula-box">
+                <div class="label">Fórmula de Estimativa de Herdabilidade</div>
+                h² = (Média da próxima geração − Média original) / (Média parental − Média original)
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-title">Implicações Práticas</div>
+                <div class="concept-text">
+                    • <strong>Não adianta</strong> fazer melhoramento para uma característica com <span class="key-term">baixa herdabilidade</span> (predominantemente ambiental) — programa de seleção artificial não vai funcionar.<br>
+                    • E nem para endocruzamento: tem que ter <span class="key-term">diversidade genética</span> para realizar com sucesso seleção artificial (considerando características de alta herdabilidade).<br>
+                    • <strong>h² não é informatura para um indivíduo</strong>, é populacional.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ===================== MAPAS MENTAIS ===================== -->
+    <div id="sec9" class="page-break">
+        <h2 style="text-align:center; font-size: 2rem; font-weight: 900; margin: 40px 0 30px; color: var(--accent-light);">🗺️ Mapas Mentais</h2>
+
+        <!-- MAPA MENTAL 1: EPIGENÉTICA -->
+        <div class="mind-map">
+            <div class="mind-map-title">Mapa Mental 1 — Epigenética</div>
+            <div class="mm-center">EPIGENÉTICA</div>
+            <div class="mm-branches">
+                <div class="mm-branch green">
+                    <div class="mm-branch-title">📝 Definição</div>
+                    <ul class="mm-branch-items">
+                        <li>Mudanças na expressão gênica</li>
+                        <li>Hereditárias (mitose/meiose)</li>
+                        <li>NÃO alteram sequência de bases</li>
+                        <li>São REVERSÍVEIS</li>
+                    </ul>
+                </div>
+                <div class="mm-branch pink">
+                    <div class="mm-branch-title">🧪 Metilação do DNA</div>
+                    <ul class="mm-branch-items">
+                        <li>Grupo metil (CH₃) no DNA</li>
+                        <li>Região 5' → REPRESSORA</li>
+                        <li>Corpo do gene → ATIVADORA</li>
+                        <li>Sítios CpG em mamíferos</li>
+                        <li>MeCP2 recruta repressores</li>
+                    </ul>
+                </div>
+                <div class="mm-branch blue">
+                    <div class="mm-branch-title">🧱 Modificações de Histonas</div>
+                    <ul class="mm-branch-items">
+                        <li>Acetilação → ATIVA (eucromatina)</li>
+                        <li>Desacetilação → REPRIME</li>
+                        <li>Metilação → Depende do resíduo</li>
+                        <li>Variante Macro H2A → X inativo</li>
+                    </ul>
+                </div>
+                <div class="mm-branch orange">
+                    <div class="mm-branch-title">🔗 RNAs Não Codificantes</div>
+                    <ul class="mm-branch-items">
+                        <li>Atuam na fase final</li>
+                        <li>Ligam-se ao mRNA transcrito</li>
+                        <li>Destroem ou bloqueiam mRNA</li>
+                        <li>Impedem tradução no ribossomo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA MENTAL 2: INATIVAÇÃO DO X -->
+        <div class="mind-map page-break">
+            <div class="mind-map-title">Mapa Mental 2 — Inativação do Cromossomo X</div>
+            <div class="mm-center">INATIVAÇÃO DO X</div>
+            <div class="mm-branches">
+                <div class="mm-branch pink">
+                    <div class="mm-branch-title">🔇 Xist & Tsix</div>
+                    <ul class="mm-branch-items">
+                        <li>Xist → silencia o X (RNA de cobertura)</li>
+                        <li>Tsix → mantém o X ativo</li>
+                        <li>Um desliga o outro em cada X</li>
+                        <li>Xist reveste toda superfície do X</li>
+                    </ul>
+                </div>
+                <div class="mm-branch blue">
+                    <div class="mm-branch-title">📋 Ordem de Eventos</div>
+                    <ul class="mm-branch-items">
+                        <li>1º Acúmulo de Xist</li>
+                        <li>2º Desacetilação geral</li>
+                        <li>3º Substituição H2A → Macro H2A.2</li>
+                        <li>4º Metilação CpG (tardia)</li>
+                        <li>5º Metilação Lisina 9 de H3</li>
+                    </ul>
+                </div>
+                <div class="mm-branch green">
+                    <div class="mm-branch-title">📍 Posição Nuclear</div>
+                    <ul class="mm-branch-items">
+                        <li>X inativo → folheto interno do envelope nuclear</li>
+                        <li>Último a replicar</li>
+                        <li>Replica e já compacta</li>
+                        <li>Posição essencial para manutenção</li>
+                    </ul>
+                </div>
+                <div class="mm-branch yellow">
+                    <div class="mm-branch-title">🐱 Consequência em Gatos</div>
+                    <ul class="mm-branch-items">
+                        <li>Gato 3 cores = fêmea ou XXY</li>
+                        <li>Gene Orange no X</li>
+                        <li>Inativação aleatória → manchas</li>
+                        <li>Branco = gene autossômico (KIT)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA MENTAL 3: METILAÇÃO DO DNA -->
+        <div class="mind-map">
+            <div class="mind-map-title">Mapa Mental 3 — Metilação do DNA em Detalhe</div>
+            <div class="mm-center">METILAÇÃO DO DNA</div>
+            <div class="mm-branches">
+                <div class="mm-branch green">
+                    <div class="mm-branch-title">📍 Por Localização</div>
+                    <ul class="mm-branch-items">
+                        <li>Região 5' (promotora) → REPRIME</li>
+                        <li>Corpo do gene → ATIVA</li>
+                        <li>Impede/facilita maquinaria</li>
+                    </ul>
+                </div>
+                <div class="mm-branch pink">
+                    <div class="mm-branch-title">🔄 Desmetilação Passiva</div>
+                    <ul class="mm-branch-items">
+                        <li>DNA replica sem metil transferase</li>
+                        <li>Fita nova = não metilada</li>
+                        <li>2+ replicações = totalmente desmetilado</li>
+                    </ul>
+                </div>
+                <div class="mm-branch blue">
+                    <div class="mm-branch-title">⚡ Desmetilação Ativa (TET)</div>
+                    <ul class="mm-branch-items">
+                        <li>TET1 → Hidroximetilcitosina</li>
+                        <li>TET2 → 5-Formilcitosina</li>
+                        <li>TET3 → 5-Carboxilcitosil</li>
+                        <li>Reparo por excisão → citosina livre</li>
+                    </ul>
+                </div>
+                <div class="mm-branch orange">
+                    <div class="mm-branch-title">🛑 MeCP2</div>
+                    <ul class="mm-branch-items">
+                        <li>Recrutado por citosinas metiladas</li>
+                        <li>Recruta outros repressores</li>
+                        <li>Gera heterocromatina compacta</li>
+                        <li>Mutação → neurodegeneração</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAPA MENTAL 4: HERANÇA POLIGÊNICA -->
+        <div class="mind-map page-break">
+            <div class="mind-map-title">Mapa Mental 4 — Herança Poligênica e Herdabilidade</div>
+            <div class="mm-center">HERANÇA POLIGÊNICA</div>
+            <div class="mm-branches">
+                <div class="mm-branch green">
+                    <div class="mm-branch-title">📊 Característica</div>
+                    <ul class="mm-branch-items">
+                        <li>Vários genes → 1 fenótipo</li>
+                        <li>Efeito aditivo dos alelos</li>
+                        <li>Variação contínua (espectro)</li>
+                        <li>F = 2n + 1 (classes fenotípicas)</li>
+                    </ul>
+                </div>
+                <div class="mm-branch pink">
+                    <div class="mm-branch-title">🔀 Monogênica vs Poligênica</div>
+                    <ul class="mm-branch-items">
+                        <li>Mono: tipo, descontínua, razões</li>
+                        <li>Poli: grau, contínua, estatística</li>
+                        <li>Mono: indivíduos e cruzamentos</li>
+                        <li>Poli: populações e parâmetros</li>
+                    </ul>
+                </div>
+                <div class="mm-branch blue">
+                    <div class="mm-branch-title">📈 Herdabilidade (h²)</div>
+                    <ul class="mm-branch-items">
+                        <li>Escala de 0 a 1</li>
+                        <li>h²=1 → 100% genético</li>
+                        <li>h²=0 → 100% ambiental</li>
+                        <li>Conceito POPULACIONAL</li>
+                    </ul>
+                </div>
+                <div class="mm-branch orange">
+                    <div class="mm-branch-title">🎯 Aplicações</div>
+                    <ul class="mm-branch-items">
+                        <li>Seleção artificial precisa de h² alto</li>
+                        <li>h² baixo → seleção não funciona</li>
+                        <li>Precisa diversidade genética</li>
+                        <li>Ex: altura, peso, cor da pele</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ===================== QUESTÕES ===================== -->
+    <div id="sec10" class="questions-section page-break">
+        <div class="questions-header">
+            <h2>📝 Questões de Revisão — Teste seus Conhecimentos</h2>
+        </div>
+
+        <div style="padding: 20px;">
+
+            <!-- Q1 -->
+            <div class="question-card" id="q1">
+                <div class="question-text">
+                    <span class="question-number">1</span>
+                    Qual é a principal diferença entre epigenética e mutação genética?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q1', false)">
+                    <span class="option-letter">A)</span> A epigenética altera a sequência de bases do DNA, enquanto a mutação não.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q1', true)">
+                    <span class="option-letter">B)</span> A epigenética é reversível e não altera a sequência de bases do DNA, enquanto a mutação altera permanentemente.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q1', false)">
+                    <span class="option-letter">C)</span> Ambas alteram a sequência de bases, mas a epigenética é mais rara.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q1', false)">
+                    <span class="option-letter">D)</span> A mutação é reversível, enquanto a epigenética é permanente.
+                </div>
+                <div class="answer-text" id="ans-q1">✅ <strong>Resposta: B)</strong> A epigenética modifica a expressão gênica sem alterar a sequência de bases e é reversível por enzimas específicas, diferente de mutações que são permanentes.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q1')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q2 -->
+            <div class="question-card" id="q2">
+                <div class="question-text">
+                    <span class="question-number">2</span>
+                    Sobre a metilação do DNA, qual das alternativas está CORRETA?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q2', false)">
+                    <span class="option-letter">A)</span> A metilação na região 5' ativa a transcrição gênica.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q2', false)">
+                    <span class="option-letter">B)</span> A metilação no corpo do gene sempre silencia a transcrição.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q2', true)">
+                    <span class="option-letter">C)</span> A metilação na região 5' reprime a transcrição, enquanto no corpo do gene tem efeito ativador.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q2', false)">
+                    <span class="option-letter">D)</span> A localização da metilação não influencia seu efeito sobre a expressão gênica.
+                </div>
+                <div class="answer-text" id="ans-q2">✅ <strong>Resposta: C)</strong> Na região 5' (promotora), a metilação bloqueia a maquinaria de transcrição (repressora). No corpo do gene, força a montagem correta do complexo transcricional (ativadora).</div>
+                <button class="reveal-btn" onclick="revealAnswer('q2')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q3 -->
+            <div class="question-card" id="q3">
+                <div class="question-text">
+                    <span class="question-number">3</span>
+                    Qual é o papel do MeCP2 na regulação epigenética?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q3', false)">
+                    <span class="option-letter">A)</span> Ativa a transcrição ao se ligar a regiões promotoras.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q3', false)">
+                    <span class="option-letter">B)</span> Remove grupos metil do DNA para permitir a transcrição.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q3', true)">
+                    <span class="option-letter">C)</span> É recrutado por citosinas metiladas, recruta outros repressores e transforma a região em heterocromatina compacta.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q3', false)">
+                    <span class="option-letter">D)</span> Apenas atua na acetilação de histonas.
+                </div>
+                <div class="answer-text" id="ans-q3">✅ <strong>Resposta: C)</strong> MeCP2 é recrutado por citosinas metiladas, recruta outros repressores e gera heterocromatina altamente compactada, refratária à transcrição. Mutações em MeCP2 causam neurodegeneração.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q3')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q4 -->
+            <div class="question-card" id="q4">
+                <div class="question-text">
+                    <span class="question-number">4</span>
+                    Sobre a desmetilação ativa mediada pelas enzimas TET, qual é a sequência correta?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q4', false)">
+                    <span class="option-letter">A)</span> TET3 → TET2 → TET1 → excisão de nucleotídeos.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q4', true)">
+                    <span class="option-letter">B)</span> TET1 (hidroximetilcitosina) → TET2 (5-formilcitosina) → TET3 (5-carboxilcitosil) → reparo por excisão.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q4', false)">
+                    <span class="option-letter">C)</span> TET1 → TET3 → TET2 → recombinação homóloga.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q4', false)">
+                    <span class="option-letter">D)</span> As enzimas TET atuam simultaneamente, sem ordem definida.
+                </div>
+                <div class="answer-text" id="ans-q4">✅ <strong>Resposta: B)</strong> TET1 oxida e gera hidroximetilcitosina → TET2 oxida para 5-formilcitosina → TET3 oxida para 5-carboxilcitosil → reconhecida pelo reparo de excisão que substitui por citosina não metilada.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q4')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q5 -->
+            <div class="question-card" id="q5">
+                <div class="question-text">
+                    <span class="question-number">5</span>
+                    Qual o efeito da acetilação de histonas sobre a expressão gênica?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q5', false)">
+                    <span class="option-letter">A)</span> Compacta a cromatina e silencia o gene.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q5', true)">
+                    <span class="option-letter">B)</span> Afrouxa o DNA, criando eucromatina, tornando o gene acessível e ativando a transcrição.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q5', false)">
+                    <span class="option-letter">C)</span> Não tem efeito sobre a expressão gênica.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q5', false)">
+                    <span class="option-letter">D)</span> Remove o gene do cromossomo permanentemente.
+                </div>
+                <div class="answer-text" id="ans-q5">✅ <strong>Resposta: B)</strong> A acetilação adiciona um grupo acetil que "afrouxa" o DNA, criando eucromatina (cromatina aberta), deixando o gene acessível à maquinaria de transcrição.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q5')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q6 -->
+            <div class="question-card" id="q6">
+                <div class="question-text">
+                    <span class="question-number">6</span>
+                    Na inativação do cromossomo X, qual é a função do RNA Xist?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q6', false)">
+                    <span class="option-letter">A)</span> Mantém o cromossomo X ativo impedindo o silenciamento.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q6', true)">
+                    <span class="option-letter">B)</span> Reveste toda a superfície do cromossomo X, promovendo sua inativação e silenciamento.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q6', false)">
+                    <span class="option-letter">C)</span> Codifica proteínas estruturais do envelope nuclear.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q6', false)">
+                    <span class="option-letter">D)</span> Promove a replicação precoce do cromossomo X.
+                </div>
+                <div class="answer-text" id="ans-q6">✅ <strong>Resposta: B)</strong> Xist é um RNA que reveste toda a superfície do cromossomo X, causando a inativação. Tsix faz o oposto, mantendo o X ativo. Ambos começam ativos e um desliga o outro.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q6')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q7 -->
+            <div class="question-card" id="q7">
+                <div class="question-text">
+                    <span class="question-number">7</span>
+                    Qual é a variante de histona que é marca registrada do cromossomo X inativo?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q7', false)">
+                    <span class="option-letter">A)</span> H2A convencional
+                </div>
+                <div class="option" onclick="selectOption(this, 'q7', false)">
+                    <span class="option-letter">B)</span> H3 metilada
+                </div>
+                <div class="option" onclick="selectOption(this, 'q7', true)">
+                    <span class="option-letter">C)</span> Macro H2A (Macro H2A.2)
+                </div>
+                <div class="option" onclick="selectOption(this, 'q7', false)">
+                    <span class="option-letter">D)</span> H4 acetilada
+                </div>
+                <div class="answer-text" id="ans-q7">✅ <strong>Resposta: C)</strong> A Macro H2A (Macro H2A.2) é uma variante de histona que substitui a H2A no cromossomo X inativado. Essa substituição é exclusiva dessa situação — não acontece em nenhuma outra.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q7')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q8 -->
+            <div class="question-card" id="q8">
+                <div class="question-text">
+                    <span class="question-number">8</span>
+                    Um gato doméstico apresenta 3 cores na pelagem. O que isso indica sobre seu cariótipo?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q8', false)">
+                    <span class="option-letter">A)</span> É necessariamente um macho XY com mutação.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q8', true)">
+                    <span class="option-letter">B)</span> É fêmea (XX) ou macho Klinefelter (XXY), pois o gene Orange está no X e a inativação aleatória gera as manchas.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q8', false)">
+                    <span class="option-letter">C)</span> A cor é determinada exclusivamente por genes autossômicos.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q8', false)">
+                    <span class="option-letter">D)</span> É um caso de pleiotropia simples sem relação com o cromossomo X.
+                </div>
+                <div class="answer-text" id="ans-q8">✅ <strong>Resposta: B)</strong> Gato de 3 cores = fêmea ou Klinefelter (XXY). O gene Orange (laranja/preto) está no X. A inativação aleatória do X gera manchas. O branco vem de gene autossômico (KIT).</div>
+                <button class="reveal-btn" onclick="revealAnswer('q8')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q9 -->
+            <div class="question-card" id="q9">
+                <div class="question-text">
+                    <span class="question-number">9</span>
+                    Se temos 2 pares de genes atuando de forma aditiva, quantas classes fenotípicas esperamos na F2?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q9', false)">
+                    <span class="option-letter">A)</span> 3
+                </div>
+                <div class="option" onclick="selectOption(this, 'q9', true)">
+                    <span class="option-letter">B)</span> 5
+                </div>
+                <div class="option" onclick="selectOption(this, 'q9', false)">
+                    <span class="option-letter">C)</span> 7
+                </div>
+                <div class="option" onclick="selectOption(this, 'q9', false)">
+                    <span class="option-letter">D)</span> 9
+                </div>
+                <div class="answer-text" id="ans-q9">✅ <strong>Resposta: B)</strong> Usando F = 2n + 1, onde n = 2 pares de genes: F = 2(2) + 1 = 5 classes fenotípicas.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q9')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q10 -->
+            <div class="question-card" id="q10">
+                <div class="question-text">
+                    <span class="question-number">10</span>
+                    Sobre a herdabilidade (h²), qual afirmativa está CORRETA?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q10', false)">
+                    <span class="option-letter">A)</span> É um conceito individual que mede a genética de uma pessoa.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q10', false)">
+                    <span class="option-letter">B)</span> h² = 1 significa que a característica é 100% ambiental.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q10', true)">
+                    <span class="option-letter">C)</span> É um conceito populacional; h² = 1 indica que a variação fenotípica é totalmente devida ao componente genético.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q10', false)">
+                    <span class="option-letter">D)</span> Uma baixa herdabilidade torna a seleção artificial mais eficaz.
+                </div>
+                <div class="answer-text" id="ans-q10">✅ <strong>Resposta: C)</strong> Herdabilidade é um conceito POPULACIONAL (não individual). h²=1 → 100% genético. Baixa herdabilidade torna a seleção artificial ineficaz, não mais eficaz.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q10')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q11 -->
+            <div class="question-card" id="q11">
+                <div class="question-text">
+                    <span class="question-number">11</span>
+                    Qual das opções abaixo NÃO é uma característica multifatorial em humanos?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q11', false)">
+                    <span class="option-letter">A)</span> Diabetes
+                </div>
+                <div class="option" onclick="selectOption(this, 'q11', false)">
+                    <span class="option-letter">B)</span> Esquizofrenia
+                </div>
+                <div class="option" onclick="selectOption(this, 'q11', true)">
+                    <span class="option-letter">C)</span> Anemia falciforme (monogênica)
+                </div>
+                <div class="option" onclick="selectOption(this, 'q11', false)">
+                    <span class="option-letter">D)</span> Hipertensão arterial
+                </div>
+                <div class="answer-text" id="ans-q11">✅ <strong>Resposta: C)</strong> Anemia falciforme é uma doença monogênica (mutação em um único gene — HBB). Diabetes, esquizofrenia e hipertensão arterial são multifatoriais (vários genes + ambiente).</div>
+                <button class="reveal-btn" onclick="revealAnswer('q11')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q12 -->
+            <div class="question-card" id="q12">
+                <div class="question-text">
+                    <span class="question-number">12</span>
+                    Sobre a desmetilação passiva, qual mecanismo leva à perda de metilação?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q12', false)">
+                    <span class="option-letter">A)</span> Ação direta das enzimas TET sobre o DNA.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q12', true)">
+                    <span class="option-letter">B)</span> A replicação do DNA sem DNA metil transferase faz com que as fitas novas não recebam metilação, diluindo as marcas ao longo das divisões.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q12', false)">
+                    <span class="option-letter">C)</span> A RNA polimerase remove os grupos metil durante a transcrição.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q12', false)">
+                    <span class="option-letter">D)</span> Endonucleases de restrição clivam os sítios metilados.
+                </div>
+                <div class="answer-text" id="ans-q12">✅ <strong>Resposta: B)</strong> Na desmetilação passiva, o DNA se replica mas sem DNA metil transferase, a fita nova fica não metilada. Após mais replicações, as moléculas ficam totalmente desmetiladas.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q12')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q13 -->
+            <div class="question-card" id="q13">
+                <div class="question-text">
+                    <span class="question-number">13</span>
+                    Qual é a diferença entre epistasia e pleiotropia?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q13', false)">
+                    <span class="option-letter">A)</span> São sinônimos para o mesmo fenômeno genético.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q13', false)">
+                    <span class="option-letter">B)</span> Epistasia é quando um gene causa vários fenótipos; pleiotropia é quando um gene silencia outro.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q13', true)">
+                    <span class="option-letter">C)</span> Epistasia: um gene altera a expressão de outro gene em locus diferente. Pleiotropia: um único gene causa vários efeitos fenotípicos diferentes.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q13', false)">
+                    <span class="option-letter">D)</span> Epistasia só ocorre em genes autossômicos e pleiotropia só em genes ligados ao X.
+                </div>
+                <div class="answer-text" id="ans-q13">✅ <strong>Resposta: C)</strong> Epistasia = um gene altera/mascara a expressão de outro gene em locus diferente (ex: KIT em gatos). Pleiotropia = um único gene produz múltiplos efeitos fenotípicos (efeito "dominó").</div>
+                <button class="reveal-btn" onclick="revealAnswer('q13')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q14 -->
+            <div class="question-card" id="q14">
+                <div class="question-text">
+                    <span class="question-number">14</span>
+                    Sobre o cromossomo X inativo, qual alternativa descreve CORRETAMENTE sua posição no núcleo?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q14', false)">
+                    <span class="option-letter">A)</span> Fica no centro do núcleo, próximo ao nucléolo.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q14', true)">
+                    <span class="option-letter">B)</span> Fica preso no folheto interno do envelope nuclear, é o último a replicar, e replica já compactando.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q14', false)">
+                    <span class="option-letter">C)</span> Está disperso pela eucromatina sem posição definida.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q14', false)">
+                    <span class="option-letter">D)</span> É exportado para o citoplasma após a inativação.
+                </div>
+                <div class="answer-text" id="ans-q14">✅ <strong>Resposta: B)</strong> O X inativo fica preso no folheto interno do envelope nuclear, é sempre o último cromossomo a replicar, replica e já compacta. A posição entre o folheto e o nucléolo é essencial para manter a compactação.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q14')">Revelar Resposta</button>
+            </div>
+
+            <!-- Q15 -->
+            <div class="question-card" id="q15">
+                <div class="question-text">
+                    <span class="question-number">15</span>
+                    O que é a vernalização no contexto epigenético?
+                </div>
+                <div class="option" onclick="selectOption(this, 'q15', true)">
+                    <span class="option-letter">A)</span> É um exemplo de memória epigenética: sementes "lembram" do frio prolongado do inverno e sabem que já podem germinar.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q15', false)">
+                    <span class="option-letter">B)</span> É o processo de mutação induzida por temperatura.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q15', false)">
+                    <span class="option-letter">C)</span> É a inativação do cromossomo X em plantas.
+                </div>
+                <div class="option" onclick="selectOption(this, 'q15', false)">
+                    <span class="option-letter">D)</span> É a replicação do DNA em condições de frio extremo.
+                </div>
+                <div class="answer-text" id="ans-q15">✅ <strong>Resposta: A)</strong> Vernalização é um exemplo clássico de memória epigenética — as sementes passam pelo frio prolongado do inverno e "sabem" que já podem germinar, sem alteração no DNA.</div>
+                <button class="reveal-btn" onclick="revealAnswer('q15')">Revelar Resposta</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ====== RODAPÉ ====== -->
+    <div style="text-align: center; padding: 40px 0; color: var(--text-dim); font-size: 0.85rem;">
+        <p>🧬 Revisão Genética P3 — Material de Estudo</p>
+        <p style="margin-top: 5px;">Gerado automaticamente a partir das anotações de aula</p>
+        <p style="margin-top: 5px;">Boa prova! 🍀</p>
+    </div>
+
+</div>
+
+<!-- ====== BOTÃO DE IMPRIMIR (desktop) ====== -->
+<button class="btn-print no-print" onclick="window.print()">
+    🖨️ Salvar como PDF
+</button>
+
+<!-- ====== BARRA DE SCORE STICKY ====== -->
+<div class="score-bar" id="scoreBar">
+    <div class="score-info">
+        <span class="score-badge" id="scoreBadge">0/15</span>
+        <div class="score-progress">
+            <div class="score-progress-fill" id="scoreProgressFill"></div>
+        </div>
+    </div>
+    <span class="score-text" id="scoreText">Responda as questões!</span>
+</div>
+
+<!-- ====== BOTÃO DE RESET ====== -->
+<div style="text-align:center; padding: 10px 0 30px;" id="resetArea" class="no-print" hidden>
+    <button class="reset-quiz-btn" onclick="resetQuiz()">🔄 Refazer Questões</button>
+</div>
+
+<!-- ====== NAVEGAÇÃO MOBILE ====== -->
+<nav class="mobile-nav no-print" id="mobileNav">
+    <button class="mobile-nav-btn" onclick="scrollToTop()">
+        <span class="nav-icon">🏠</span>
+        <span>Início</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="openSectionsMenu()">
+        <span class="nav-icon">📑</span>
+        <span>Seções</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="scrollToSection('sec9')">
+        <span class="nav-icon">🗺️</span>
+        <span>Mapas</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="scrollToSection('sec10')">
+        <span class="nav-icon">📝</span>
+        <span>Questões</span>
+    </button>
+    <button class="mobile-nav-btn" onclick="shareContent()">
+        <span class="nav-icon">📤</span>
+        <span>Enviar</span>
+    </button>
+</nav>
+
+<!-- ====== MENU DE SEÇÕES OVERLAY ====== -->
+<div class="sections-overlay" id="sectionsOverlay">
+    <div class="sections-overlay-header">
+        <h2>📑 Navegar Seções</h2>
+        <button class="close-overlay" onclick="closeSectionsMenu()">✕</button>
+    </div>
+    <a class="section-nav-item" onclick="goToSection('sec1')">
+        <div class="section-nav-icon">🔬</div>
+        <div>
+            <div class="section-nav-text">Epigenética</div>
+            <div class="section-nav-sub">Conceitos Fundamentais • Aulas 1-2</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec2')">
+        <div class="section-nav-icon">🧪</div>
+        <div>
+            <div class="section-nav-text">Metilação do DNA</div>
+            <div class="section-nav-sub">Repressora vs Ativadora • Aulas 1-2</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec3')">
+        <div class="section-nav-icon">🧱</div>
+        <div>
+            <div class="section-nav-text">Modificações de Histonas</div>
+            <div class="section-nav-sub">Acetilação, Metilação • Aulas 1-2</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec4')">
+        <div class="section-nav-icon">🔗</div>
+        <div>
+            <div class="section-nav-text">RNAs Não Codificantes</div>
+            <div class="section-nav-sub">Silenciamento pós-transcricional • Aula 1</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec5')">
+        <div class="section-nav-icon">🔇</div>
+        <div>
+            <div class="section-nav-text">Inativação do Cromossomo X</div>
+            <div class="section-nav-sub">Xist, Tsix, Macro H2A • Aula 3</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec6')">
+        <div class="section-nav-icon">🐱</div>
+        <div>
+            <div class="section-nav-text">Pelagem em Gatos</div>
+            <div class="section-nav-sub">Orange, KIT, Epistasia • Aulas 3-4</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec7')">
+        <div class="section-nav-icon">📊</div>
+        <div>
+            <div class="section-nav-text">Herança Poligênica</div>
+            <div class="section-nav-sub">Multifatorial, Fórmulas • Aulas 4-5, 21</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec8')">
+        <div class="section-nav-icon">📈</div>
+        <div>
+            <div class="section-nav-text">Herdabilidade</div>
+            <div class="section-nav-sub">Conceito Populacional • Aulas 5, 22</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec9')">
+        <div class="section-nav-icon">🗺️</div>
+        <div>
+            <div class="section-nav-text">Mapas Mentais</div>
+            <div class="section-nav-sub">4 mapas visuais completos</div>
+        </div>
+    </a>
+    <a class="section-nav-item" onclick="goToSection('sec10')">
+        <div class="section-nav-icon">📝</div>
+        <div>
+            <div class="section-nav-text">Questões de Revisão</div>
+            <div class="section-nav-sub">15 questões interativas</div>
+        </div>
+    </a>
+</div>
+
+<!-- ====== CONFETTI CANVAS ====== -->
+<canvas class="confetti-overlay" id="confettiCanvas"></canvas>
+
+<script>
+    // ====== STATE ======
+    let totalQuestions = 15;
+    let answeredCount = 0;
+    let correctCount = 0;
+
+    // ====== QUIZ LOGIC ======
+    function selectOption(el, questionId, isCorrect) {
+        const card = document.getElementById(questionId);
+        const options = card.querySelectorAll('.option');
+        const answered = card.dataset.answered;
+
+        if (answered === 'true') return;
+        card.dataset.answered = 'true';
+
+        // Haptic feedback on mobile (if supported)
+        if (navigator.vibrate) navigator.vibrate(30);
+
+        options.forEach(opt => {
+            opt.style.cursor = 'default';
+            opt.style.pointerEvents = 'none';
+        });
+
+        answeredCount++;
+
+        if (isCorrect) {
+            el.classList.add('correct');
+            correctCount++;
+            // brief vibration for correct
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        } else {
+            el.classList.add('wrong');
+            if (navigator.vibrate) navigator.vibrate(100);
+            options.forEach(opt => {
+                if (opt.getAttribute('onclick') && opt.getAttribute('onclick').includes('true')) {
+                    opt.classList.add('correct');
+                }
+            });
+        }
+
+        document.getElementById('ans-' + questionId).style.display = 'block';
+        updateScore();
+
+        if (answeredCount === totalQuestions) {
+            showFinalResult();
+        }
+    }
+
+    function revealAnswer(questionId) {
+        const answerEl = document.getElementById('ans-' + questionId);
+        answerEl.style.display = answerEl.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function updateScore() {
+        const badge = document.getElementById('scoreBadge');
+        const fill = document.getElementById('scoreProgressFill');
+        const text = document.getElementById('scoreText');
+        const bar = document.getElementById('scoreBar');
+
+        bar.classList.add('visible');
+        badge.textContent = `${correctCount}/${answeredCount}`;
+        badge.classList.remove('pulse');
+        void badge.offsetWidth; // reflow
+        badge.classList.add('pulse');
+
+        fill.style.width = `${(answeredCount / totalQuestions) * 100}%`;
+
+        const pct = Math.round((correctCount / answeredCount) * 100);
+        if (answeredCount < totalQuestions) {
+            text.textContent = `${pct}% de acerto • ${totalQuestions - answeredCount} restantes`;
+        }
+    }
+
+    function showFinalResult() {
+        const text = document.getElementById('scoreText');
+        const pct = Math.round((correctCount / totalQuestions) * 100);
+        let emoji = '';
+        if (pct >= 90) emoji = '🏆 Excelente!';
+        else if (pct >= 70) emoji = '👏 Muito bom!';
+        else if (pct >= 50) emoji = '💪 Pode melhorar!';
+        else emoji = '📚 Estude mais!';
+
+        text.textContent = `${emoji} ${correctCount}/${totalQuestions} (${pct}%)`;
+
+        document.getElementById('resetArea').hidden = false;
+
+        if (pct >= 70) launchConfetti();
+    }
+
+    function resetQuiz() {
+        answeredCount = 0;
+        correctCount = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const qid = 'q' + i;
+            const card = document.getElementById(qid);
+            if (!card) continue;
+            card.dataset.answered = '';
+
+            const options = card.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                opt.style.cursor = 'pointer';
+                opt.style.pointerEvents = 'auto';
+            });
+
+            const ans = document.getElementById('ans-' + qid);
+            if (ans) ans.style.display = 'none';
+        }
+
+        document.getElementById('scoreBar').classList.remove('visible');
+        document.getElementById('resetArea').hidden = true;
+        scrollToSection('sec10');
+    }
+
+    // ====== NAVIGATION ======
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function goToSection(id) {
+        closeSectionsMenu();
+        setTimeout(() => scrollToSection(id), 200);
+    }
+
+    function openSectionsMenu() {
+        document.getElementById('sectionsOverlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSectionsMenu() {
+        document.getElementById('sectionsOverlay').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ====== SHARE (Web Share API for mobile) ======
+    async function shareContent() {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: '🧬 Revisão Genética P3',
+                    text: 'Material de revisão interativo de Genética com mapas mentais e questões!',
+                    url: window.location.href
+                });
+            } catch(e) {
+                // User cancelled share
+            }
+        } else {
+            // Fallback: copy URL
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Link copiado! Cole no WhatsApp para compartilhar.');
+            } catch(e) {
+                alert('Compartilhe este arquivo HTML pelo WhatsApp ou email.');
+            }
+        }
+    }
+
+    // ====== SCROLL SPY - highlight active nav ======
+    const sections = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7','sec8','sec9','sec10'];
+
+    function updateActiveNav() {
+        const scrollY = window.scrollY + 200;
+        let activeSection = '';
+
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.offsetTop <= scrollY) {
+                activeSection = id;
+            }
+        });
+
+        // Show score bar when in questions section
+        const sec10 = document.getElementById('sec10');
+        if (sec10 && window.scrollY >= sec10.offsetTop - 300 && answeredCount > 0) {
+            document.getElementById('scoreBar').classList.add('visible');
+        } else if (answeredCount === 0) {
+            document.getElementById('scoreBar').classList.remove('visible');
+        }
+    }
+
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+    // ====== CONFETTI ======
+    function launchConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#7c3aed','#3b82f6','#10b981','#ec4899','#f97316','#eab308','#ef4444'];
+
+        for (let i = 0; i < 120; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                r: Math.random() * 6 + 3,
+                d: Math.random() * 120 + 10,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.random() * 10 - 5,
+                tiltAngle: Math.random() * Math.PI,
+                tiltInc: Math.random() * 0.07 + 0.05
+            });
+        }
+
+        let frame = 0;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                ctx.stroke();
+
+                p.y += (Math.cos(p.d) + 2 + p.r / 3);
+                p.x += Math.sin(frame * 0.01);
+                p.tiltAngle += p.tiltInc;
+                p.tilt = Math.sin(p.tiltAngle) * 12;
+            });
+
+            frame++;
+            if (frame < 200) {
+                requestAnimationFrame(draw);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        draw();
+    }
+</script>
+
+</body>
+</html>
