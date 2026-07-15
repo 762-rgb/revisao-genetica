@@ -50,6 +50,44 @@
             padding-bottom: 80px;
         }
 
+        
+        /* ====== ROMANTIC NOTES ====== */
+        .love-note {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(124, 58, 237, 0.15));
+            border-left: 4px solid var(--pink);
+            border-radius: 0 16px 16px 0;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 1.05rem;
+            color: var(--pink-light);
+            font-weight: 500;
+            font-style: italic;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .love-note::before {
+            content: '❤️';
+            font-size: 1.8rem;
+            font-style: normal;
+        }
+        .love-image-container {
+            text-align: center;
+            margin: 35px 0;
+            position: relative;
+        }
+        .love-image-container img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(236, 72, 153, 0.3);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .love-image-container img:hover {
+            transform: scale(1.02);
+        }
+
         /* ====== PRINT STYLES ====== */
         @media print {
             body {
@@ -98,6 +136,41 @@
             .reveal-btn { display: none !important; }
             .answer-text { display: block !important; color: #10b981 !important; }
             .container { max-width: 100%; padding: 0 10px; }
+            
+            /* Flashcards Print Visibility */
+            .flashcard {
+                height: auto !important;
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+            .flashcard-inner {
+                transform: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            .flashcard-front, .flashcard-back {
+                position: relative !important;
+                transform: none !important;
+                display: block !important;
+                page-break-inside: avoid;
+                border: 1.5px solid #ddd !important;
+                color: #1a1a2e !important;
+                background: white !important;
+                -webkit-backface-visibility: visible !important;
+                backface-visibility: visible !important;
+                padding: 15px !important;
+            }
+            .flashcard-front {
+                border-bottom: none !important;
+                border-radius: 8px 8px 0 0 !important;
+                background: #f8f9fa !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .flashcard-back {
+                border-top: 1px dashed #ddd !important;
+                border-radius: 0 0 8px 8px !important;
+            }
         }
 
         .container {
@@ -1373,7 +1446,174 @@
     </div>
 
     <!-- ===================== SEÇÃO 8: HERDABILIDADE ===================== -->
-    <div class="section-card" id="sec8">
+    
+    <!-- ====== ESTUDO DIRIGIDO ====== -->
+    <!-- ====== ESTUDO DIRIGIDO ====== -->
+    <!-- ====== ESTUDO DIRIGIDO ====== -->
+    <div class="section-card" id="sec-ed">
+        <div class="topic-header blue">
+            <h2>Estudo Dirigido: Genética de Populações</h2>
+            <span class="aula-tag">PDF 11</span>
+        </div>
+        <div class="section-body">
+            <p>Resolução super detalhada e amorosa do estudo dirigido sobre genética de populações, feita especialmente para a Polyana aprender do zero absoluto! ❤️</p>
+            
+            <div class="concept-block">
+                <div class="concept-title">O Básico: O que são p e q? (Leia antes de calcular!)</div>
+                <div class="concept-text">
+                    Amor, antes de fazermos qualquer conta, vamos entender as letras. Pense na genética de uma população como um grande saco cheio de bolinhas (alelos).<br><br>
+                    - As bolinhas dominantes (ex: <strong>A</strong>) nós chamamos de <strong>p</strong>.<br>
+                    - As bolinhas recessivas (ex: <strong>a</strong>) nós chamamos de <strong>q</strong>.<br><br>
+                    Como só existem esses dois tipos de bolinha, se a gente somar a porcentagem de "bolinhas A" com a porcentagem de "bolinhas a", tem que dar 100% da população, certo? Na matemática, 100% é representado pelo número 1. Então, a nossa primeira fórmula mágica é:<br>
+                    <strong>p + q = 1</strong><br><br>
+                    Isso significa que, se você descobrir que <code>q = 0,4 (40%)</code>, o <code>p</code> só pode ser <code>0,6 (60%)</code> para fechar a conta!<br><br>
+                    
+                    <strong>E os genótipos (p², 2pq, q²)?</strong><br>
+                    Quando as pessoas nascem, elas pegam duas bolinhas (uma do pai, uma da mãe).<br>
+                    - Pegar duas bolinhas dominantes (AA) é multiplicar p vezes p = <strong>p²</strong>.<br>
+                    - Pegar duas bolinhas recessivas (aa) é multiplicar q vezes q = <strong>q²</strong>.<br>
+                    - Pegar uma bolinha de cada (Aa) pode acontecer de duas formas (pai A mãe a, ou pai a mãe A), por isso a fórmula do heterozigoto é <strong>2pq</strong> (2 vezes p vezes q).<br><br>
+                    
+                    <strong>💡 A Regra de Ouro da Polly:</strong> Quando o exercício falar de características dominantes e recessivas, <strong>sempre, sempre, sempre</strong> procure os indivíduos com a característica recessiva primeiro. Eles são a nossa âncora! Eles representam o <strong>q²</strong>. Depois de achar a porcentagem deles (q²), basta pegar a calculadora e tirar a raiz quadrada para achar o valor de apenas uma bolinha recessiva (q). A partir daí, o problema está resolvido!
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">4</span> PTC (T = dominante gustador, t = recessivo não gustador). 100 pessoas: 84 gustadores.</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> Polly, a questão disse que 84 pessoas sentem o gosto (são dominantes). O problema é que ser dominante pode ser TT ou Tt. Não sabemos quem é quem! Mas, se de 100 pessoas, 84 sentem gosto, as outras 16 pessoas <strong>não sentem</strong>. Quem não sente obrigatoriamente é recessivo (tt). Lembra da regra de ouro? Achamos o nosso q²!<br><br>
+                    <strong>Passo a Passo:</strong><br>
+                    1. <strong>Achar o q² (porcentagem de recessivos):</strong><br>
+                    &nbsp;&nbsp;&nbsp;São 16 pessoas em um total de 100. Vamos dividir para transformar em decimal (frequência).<br>
+                    &nbsp;&nbsp;&nbsp;<code>q² = 16 ÷ 100 = 0,16</code>.<br>
+                    2. a) <strong>Achar os alelos (as "bolinhas" individuais, p e q):</strong><br>
+                    &nbsp;&nbsp;&nbsp;Se q² é 0,16, pegamos a calculadora e fazemos a raiz quadrada de 0,16.<br>
+                    &nbsp;&nbsp;&nbsp;<code>q = √0,16 = 0,4</code>. (Isso quer dizer que 40% dos alelos da população são "t").<br>
+                    &nbsp;&nbsp;&nbsp;Agora, se p + q = 1, qual é o valor de p?<br>
+                    &nbsp;&nbsp;&nbsp;<code>p = 1 - 0,4 = 0,6</code>. (60% dos alelos são "T").<br>
+                    3. b) <strong>Achar os heterozigotos e dominantes (Tt e TT):</strong><br>
+                    &nbsp;&nbsp;&nbsp;Fórmula do heterozigoto (Tt) é <strong>2pq</strong>:<br>
+                    &nbsp;&nbsp;&nbsp;<code>2 × 0,6 (p) × 0,4 (q) = 0,48</code>. Isso é 48%. Em 100 pessoas, significa <strong>48 pessoas</strong>.<br>
+                    &nbsp;&nbsp;&nbsp;Fórmula do homozigoto dominante (TT) é <strong>p²</strong>:<br>
+                    &nbsp;&nbsp;&nbsp;<code>p² = 0,6 × 0,6 = 0,36</code>. Isso é 36%. Em 100 pessoas, <strong>36 pessoas</strong>.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">5</span> Albinismo (recessivo). 1 em 20.000 albinos. Qual a % de heterozigotos?</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> Meu amor, aqui o exercício foi bonzinho! Ele já te deu direto a galera recessiva (os albinos). Ele disse que é 1 albino a cada 20.000 pessoas. Então ele já nos deu o q² de bandeja. É só dividir!<br><br>
+                    <strong>Passo a Passo:</strong><br>
+                    1. Frequência do genótipo albino (q²): Divida 1 por 20.000 na calculadora.<br>
+                    &nbsp;&nbsp;&nbsp;<code>q² = 1 ÷ 20.000 = 0,00005</code><br>
+                    2. Frequência do alelo albino (q): Raiz quadrada de 0,00005.<br>
+                    &nbsp;&nbsp;&nbsp;<code>q = √0,00005 = 0,00707</code><br>
+                    3. Frequência do alelo normal (p): Se p + q = 1...<br>
+                    &nbsp;&nbsp;&nbsp;<code>p = 1 - 0,00707 = 0,99293</code><br>
+                    4. % de heterozigotos (Aa): A fórmula é sempre <strong>2pq</strong>.<br>
+                    &nbsp;&nbsp;&nbsp;<code>2 × 0,99293 (p) × 0,00707 (q) = 0,014</code>.<br>
+                    Para transformar 0,014 em porcentagem, basta multiplicar por 100. Resultado: <strong>1,4% da população</strong>.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">6</span> Alcaptonúria (recessiva). 1 em 1.000.000. Qual a proporção de portadores?</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> Igualzinho ao de cima, Polly! A doença é recessiva, então o doente é "aa", ou seja, o nosso q².<br><br>
+                    <strong>Passo a Passo:</strong><br>
+                    1. <code>q² = 1 ÷ 1.000.000 = 0,000001</code><br>
+                    2. Raiz quadrada para achar o q: <code>q = √0,000001 = 0,001</code><br>
+                    3. Achando o p: <code>p = 1 - 0,001 = 0,999</code><br>
+                    4. Achando portadores (pessoas que têm o alelo mas não são doentes, ou seja, heterozigotos Aa = 2pq):<br>
+                    &nbsp;&nbsp;&nbsp;<code>2 × 0,999 × 0,001 = 0,001998</code>.<br>
+                    Arredondando para facilitar a vida, dá <strong>0,002 (ou 0,2%)</strong>, o que equivale a 1 pessoa portadora a cada 500 habitantes.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">7</span> Daltonismo (Ligado ao X recessivo). 1 em 10 homens daltônicos.</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> ⚠️ <strong>Atenção redobrada, linda!</strong> Quando o exercício fala de <strong>Ligado ao X</strong>, a regra muda para os homens. Por que? Homem é XY, só tem UM cromossomo X. Então ele não tem duas letrinhas (não tem q²). O homem é como se fosse um saco transparente: a proporção de homens daltônicos na população <strong>é exatamente igual à proporção da "bolinha" do daltonismo (q)</strong>. Você não tira raiz quadrada para os homens!<br><br>
+                    <strong>Passo a Passo:</strong><br>
+                    - a) <strong>Freq. do alelo daltônico (q):</strong> O exercício diz 1 em 10. Dividindo: <code>1 ÷ 10 = 0,1</code>. Pronto, o q já é 0,1. Viu que fácil?<br>
+                    - b) <strong>Freq. do alelo normal (p):</strong> <code>p = 1 - 0,1 = 0,9</code>.<br>
+                    - c) <strong>Mulheres normais homozigotas (DD):</strong> As mulheres têm dois Xs! Elas seguem as fórmulas normais (elevadas ao quadrado). Então, é <strong>p²</strong>. <code>0,9 × 0,9 = 0,81</code> (81%).<br>
+                    - d) <strong>Mulheres portadoras (Dd):</strong> Fórmula <strong>2pq</strong>. <code>2 × 0,9 × 0,1 = 0,18</code> (18%).<br>
+                    - e) <strong>Mulheres daltônicas (dd):</strong> Fórmula <strong>q²</strong>. <code>0,1 × 0,1 = 0,01</code> (1%).
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">8</span> Gado Shorthorn: 108 vermelhos (R/R), 144 ruões (R/W), 48 brancos (W/W).</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> Polly, quando temos uma situação de <strong>codominância</strong> (onde o heterozigoto tem cor diferente, tipo os ruões), a gente enxerga TODO MUNDO! A gente não precisa adivinhar usando q², porque sabemos exatamente quantos heterozigotos e homozigotos tem ali. Quando a gente sabe exatamente a composição de todos os indivíduos, nós usamos o <strong>Método da Contagem Gênica</strong>: nós vamos literalmente contar os alelos um a um. Chega de raiz quadrada aqui!<br><br>
+                    <strong>Passo a Passo (Contando as bolinhas):</strong><br>
+                    1. <strong>Total de animais:</strong> 108 + 144 + 48 = 300 animais.<br>
+                    2. <strong>Total de alelos (bolinhas):</strong> Se cada animal carrega dois alelos, o curral inteiro tem <code>300 × 2 = 600</code> alelos.<br>
+                    3. a) <strong>Frequência do alelo R (vermelho):</strong> Quem tem a bolinha vermelha? O gado vermelho tem DUAS. O gado ruão tem UMA. Vamos contar:<br>
+                    &nbsp;&nbsp;&nbsp;Temos 108 vermelhos, então: <code>108 × 2 = 216 bolinhas R</code>.<br>
+                    &nbsp;&nbsp;&nbsp;Temos 144 ruões, então: <code>144 × 1 = 144 bolinhas R</code>.<br>
+                    &nbsp;&nbsp;&nbsp;Total de bolinhas R: 216 + 144 = 360. Para achar a frequência (p), dividimos pelo total: <code>360 ÷ 600 = 0,6</code>. O alelo p(R) vale 0,6.<br>
+                    &nbsp;&nbsp;&nbsp;<strong>Frequência do alelo W (branco):</strong> A mesma lógica, mas podemos simplesmente fazer <code>q = 1 - 0,6 = 0,4</code>.<br>
+                    4. b) <strong>Frequências matemáticas H-W:</strong> Agora aplicamos a fórmula para ver se a teoria bate com o curral. <br>
+                    &nbsp;&nbsp;&nbsp;Teoria R/R (p²) = <code>0,6² = 0,36</code>. Teoria R/W (2pq) = <code>2 × 0,6 × 0,4 = 0,48</code>. Teoria W/W (q²) = <code>0,4² = 0,16</code>.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">9</span> Grupos Sanguíneos ABO: 110 (A), 430 (B), 210 (AB), 250 (O). Total = 1000.</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>O Raciocínio:</strong> Meu anjo, aqui temos 3 alelos em jogo (IA, IB e i). Em vez de usar p e q, nós vamos usar p, q e r! A soma deles agora é: <code>p + q + r = 1</code>. A regra de ouro continua: sempre comece pelo totalmente recessivo! Quem é ele no sangue? O sangue tipo O (ii). O sangue O é o nosso "r²".<br><br>
+                    <strong>Passo a Passo:</strong><br>
+                    1. Achando a letrinha <strong>r (alelo i)</strong>:<br>
+                    &nbsp;&nbsp;&nbsp;O total de sangue O é 250 em 1000. <code>r² = 250 ÷ 1000 = 0,25</code>.<br>
+                    &nbsp;&nbsp;&nbsp;Tiramos a raiz para achar a bolinha "i": <code>r = √0,25 = 0,5</code>.<br>
+                    2. Achando a letrinha <strong>q (alelo IB)</strong>: Essa é uma tática avançada! Se somarmos a porcentagem dos sanguinhos B e O, na matemática deles isso resulta na expressão <code>(q + r)²</code>. <br>
+                    &nbsp;&nbsp;&nbsp;Pessoas B = 430. Pessoas O = 250. Soma = 680 de 1000 = 0,68.<br>
+                    &nbsp;&nbsp;&nbsp;Então: <code>(q + r)² = 0,68</code>.<br>
+                    &nbsp;&nbsp;&nbsp;Passa o quadrado como raiz para o outro lado: <code>q + r = √0,68 = 0,8246</code>.<br>
+                    &nbsp;&nbsp;&nbsp;A gente já sabe que o <code>r</code> vale 0,5 (passo 1). Então: <code>q + 0,5 = 0,8246</code>. Subtraindo, chegamos em <code>q = 0,3246</code>.<br>
+                    3. Achando a letrinha <strong>p (alelo IA)</strong>:<br>
+                    &nbsp;&nbsp;&nbsp;Como a soma das 3 letras é 1... <code>p = 1 - (0,5 + 0,3246) = 0,1754</code>.
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">10 a 16</span> Outras questões de contagem e heredograma.</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>Resumo Prático para você:</strong><br>
+                    - Quando o problema te der exatamente a quantidade de cada um (tipo 300 AA, 600 Aa, 100 aa), não tire raiz quadrada. Faça a "contagem das bolinhas" igual na Questão 8.<br>
+                    - Quando o problema te der apenas a doença e disser que é recessiva (ex: Questões 13 e 14), essa frequência é o seu <strong>q²</strong>. Tira a raiz, acha o <strong>q</strong>, depois faz <strong>p = 1 - q</strong>.<br>
+                    - Se pedir a probabilidade em um heredograma (Questão 15) para uma pessoa normal, a chance dela ser portadora (heterozigota) é <code>2q / (p + 2q)</code> em vez de só 2pq, porque estamos excluindo a chance dela ser doente (q²)!
+                </div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-text"><span class="question-number">17</span> Forças que tiram a população do equilíbrio H-W.</div>
+                <div class="concept-text" style="margin-top: 10px;">
+                    <strong>Resolução Completa:</strong> A equação de H-W só funciona perfeitamente em populações ideais. Na vida real, existem as forças evolutivas:<br><br>
+                    <ul class="sub-list" style="margin-left: 10px;">
+                        <li><strong>a) Mutação:</strong> Cria novos alelos. Ex: rato que nasce albino do nada.</li>
+                        <li><strong>b) Migração (Fluxo Gênico):</strong> Entrada/saída de indivíduos. Ex: pássaros de outra ilha trazendo genes novos.</li>
+                        <li><strong>c) Seleção natural:</strong> O ambiente escolhe o melhor. Ex: mariposas escuras sobrevivendo mais na fuligem.</li>
+                        <li><strong>d) Deriva Genética:</strong> Acasos do destino (sorte). Ex: pisar sem querer em todos os besouros verdes, sobrando só os vermelhos.</li>
+                        <li><strong>e) Reprodução não-aleatória:</strong> Cruzamento entre parentes (endogamia). Ex: cães de raça cruzando entre si, aumentando doenças.</li>
+                        <li><strong>f) Sobrevida desigual:</strong> Quem tem genótipo ruim morre cedo. Ex: gato Manx homozigoto morre antes de nascer.</li>
+                        <li><strong>g) Subdivisão:</strong> Uma barreira separa a população. Ex: construir uma rodovia dividindo sapos de uma lagoa.</li>
+                        <li><strong>h) Vantagem do heterozigoto:</strong> O heterozigoto tem o melhor dos dois mundos. Ex: pessoas Aa para anemia falciforme não morrem da anemia nem de malária.</li>
+                        <li><strong>i) Efeito gargalo:</strong> Desastre que mata quase todos. Ex: caçaram 99% das onças; os 1% que sobraram recriam a população, mas com genes super repetidos.</li>
+                        <li><strong>j) Efeito fundador:</strong> Um grupinho pequeno vai morar longe e funda uma cidade. Ex: colonos Amish isolados, onde a chance de ter uma doença genética específica explode.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="love-note">Nem Hardy e nem Weinberg conseguiriam calcular a frequência do meu amor por você. Ele não precisa de condições ideais, é constante e não para de evoluir! Te amo, Polyana!</div>
+
+<div class="section-card" id="sec8">
         <div class="topic-header green">
             <h2><span class="emoji-icon">📈</span> Herdabilidade (h²) <span class="aula-tag">AULAS 5, 22</span></h2>
         </div>
